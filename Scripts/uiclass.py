@@ -17,7 +17,7 @@ class Emote(QPushButton):
     border = 2
     style_unselected = "border: 1px solid gray"
     style_selected = "border: 3px solid orange"
-    emote_height = 50
+    emote_height = 51
 
     def __init__(self, sevenTvUrl: str, image_data: bytes, *args, **kwargs):
         super().__init__(*args, **kwargs)
