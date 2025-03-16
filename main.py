@@ -10,10 +10,6 @@ api = SevenTvApi()
 this_folder = getcwd()
 
 
-def kids(layout: QHBoxLayout) -> list:
-    return [layout.itemAt(i) for i in range(layout.count())]
-
-
 class Emo(QMainWindow):
     def __init__(self):
         super().__init__()

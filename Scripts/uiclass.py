@@ -65,15 +65,18 @@ class Emote(QPushButton):
         super().mousePressEvent(event)
 
     def open_frame_selector(self):
+        window_width = 850
         self.selector_dialog = QDialog(self.parent())
         self.selector_dialog.setWindowTitle("Select Frame")
-        self.selector_dialog.setGeometry(200, 200, 800, 600)
+        self.selector_dialog.setGeometry(200, 200, window_width, 600)
 
         dialog_layout = QVBoxLayout(self.selector_dialog)
         scroll_area = QScrollArea(self.selector_dialog)
         scroll_widget = QWidget()
         scroll_layout = QGridLayout(scroll_widget)
 
+        row = 0
+        col = 0
         self.gif_frames = self.parse_gif(self.image_data)
         for index, frame in enumerate(self.gif_frames):
             frame_button = QPushButton()
@@ -82,9 +85,12 @@ class Emote(QPushButton):
             frame_button.setIconSize(self.size())
             frame_button.setIcon(QIcon(frame))
             frame_button.mousePressEvent = lambda event, idx=index: self.select_frame(idx)
-            row = index // 8
-            col = index % 8
+            
             scroll_layout.addWidget(frame_button, row, col)
+            col += 1
+            if (col+1) * frame.size().width() + col * 5 > window_width - 30:
+                col = 0
+                row += 1
 
         scroll_area.setWidget(scroll_widget)
         dialog_layout.addWidget(scroll_area)
