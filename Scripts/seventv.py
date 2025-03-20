@@ -1,11 +1,8 @@
-import httpx
-import httpx
+import requests
 import json
 
 
 class SevenTvEmote:
-    url_image_prefix = 'https://cdn.7tv.app/emote/'
-
     def __init__(self, name: str, animated: bool, resolution: list, emote_id: str):
         self.name = name
         self.url = "https://7tv.app/emotes/" + emote_id
@@ -34,7 +31,7 @@ class SevenTvEmote:
         return self.better_res
 
     def get_image_url(self):
-        return SevenTvEmote.url_image_prefix + self.emote_id + "/" +self.get_better_res()["name"]
+        return 'https://cdn.7tv.app/emote/' + self.emote_id + "/" +self.get_better_res()["name"]
     
     
 class SevenTvApi:
@@ -45,7 +42,7 @@ class SevenTvApi:
 
     def return_json(self, url: str):
         emote_id = url[16:]
-        result = httpx.get(self.api + emote_id).json()
+        result = requests.get(self.api + emote_id).json()
         return result
 
     def get_emote(self, url: str) -> object:
@@ -57,8 +54,7 @@ class SevenTvApi:
         """
         emote_id = url[16:]
         
-        # result = httpx.get(self.api + emote_id).json()
-        result = httpx.get(self.api + emote_id).json()
+        result = requests.get(self.api + emote_id).json()
         name = result["name"]
         animated = result["animated"]
         resolution = result["host"]["files"]
@@ -73,7 +69,7 @@ class SevenTvApi:
         :return: [SevenTvEmotes()...]
         """
         set_id = url[16:]
-        result = httpx.get(self.api + set_id).json()
+        result = requests.get(self.api + set_id).json()
 
         emote_list = list()
 
@@ -85,3 +81,6 @@ class SevenTvApi:
             emote_list.append(SevenTvEmote(name, animated, resolution, emote_id))
 
         return emote_list
+    
+    # def sevenTvLink(self, link):
+

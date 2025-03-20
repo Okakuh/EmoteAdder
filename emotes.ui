@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>857</width>
-    <height>589</height>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,8 +29,13 @@ color: rgb(255, 255, 255);</string>
      <x>10</x>
      <y>10</y>
      <width>331</width>
-     <height>561</height>
+     <height>521</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(30, 30, 30);
+border-radius: 5px;
+border: 2px solid  rgb(74, 74, 74);</string>
    </property>
    <property name="widgetResizable">
     <bool>true</bool>
@@ -40,8 +45,8 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>329</width>
-      <height>559</height>
+      <width>327</width>
+      <height>517</height>
      </rect>
     </property>
    </widget>
@@ -372,7 +377,9 @@ border: 2px solid  rgb(74, 74, 74);</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border: 1px solid gray</string>
+    <string notr="true">background-color: rgb(30, 30, 30);
+border-radius: 5px;
+border: 2px solid  rgb(74, 74, 74);</string>
    </property>
    <property name="text">
     <string/>
@@ -453,17 +460,34 @@ border: 2px solid  rgb(74, 74, 74);</string>
     <string>book</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="butAddEmotes">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
-     <x>680</x>
-     <y>430</y>
-     <width>91</width>
-     <height>61</height>
+     <x>10</x>
+     <y>540</y>
+     <width>331</width>
+     <height>29</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <stylestrategy>PreferDefault</stylestrategy>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(30, 30, 30);
+border-radius: 5px;
+border: 2px solid  rgb(74, 74, 74);</string>
+   </property>
    <property name="text">
-    <string>paste link</string>
+    <string>Add emote(s)</string>
    </property>
   </widget>
  </widget>

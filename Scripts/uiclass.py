@@ -139,7 +139,7 @@ class Worker(QRunnable):
         if response.status_code == 200:
             self.main_window.metaObject().invokeMethod(
                 self.main_window,
-                "addEmoteToDisplay",
+                "__road",
                 Qt.ConnectionType.QueuedConnection,
                 Q_ARG(SevenTvEmote, emote_data),
                 Q_ARG(bytes, response.content),
