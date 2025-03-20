@@ -20,9 +20,9 @@ class Emo(QMainWindow):
 
         self.emotesList = EmotesDisplay(self, self.emotesDisplay)
 
-        # d = api.get_emote_set("https://7tv.app/emote-sets/01JDQ3YGV7TS0814C326PZFK9C")
-        # for emote in d:
-        #     self.emotesList.addEmote(emote.url)
+        d = api.get_emote_set("https://7tv.app/emote-sets/01JDQ3YGV7TS0814C326PZFK9C")
+        for emote in d:
+            self.emotesList.addEmote(emote.url)
 
 
 

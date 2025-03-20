@@ -10,7 +10,14 @@ from time import sleep
 api = SevenTvApi()
 
 def kids(layout: QHBoxLayout) -> list:
-    return [layout.itemAt(i) for i in range(layout.count())]
+    result = []
+    for i in range(layout.count()):
+        item = layout.itemAt(i)
+        if item.widget():
+            result.append(item.widget())
+            continue
+        result.append(item)
+    return result
 
 
 
@@ -165,12 +172,11 @@ class EmotesDisplay:
                 emotes = kids(layout)
                 total_widget_lenth = len(emotes) * spacing
                 for emote in emotes:
-                    total_widget_lenth += emote.widget().iconWidth
+                    total_widget_lenth += emote.iconWidth
                     
                 if total_widget_lenth + emoteToAdd.iconWidth < self.displayWidth:
                     return rows[indx]
                 else:
-                    # print(len(emotes))
                     if indx + 1 == len(rows):
                         self.addNewRow()
                         return kids(self.emotes_rows)[-1]
@@ -186,7 +192,7 @@ class EmotesDisplay:
         result = []
         for row in kids(self.emotes_rows):
             for emote in kids(row):
-                result.append(emote.widget())
+                result.append(emote)
         return result
 
     def select(self, selectedEmote: Emote) -> None:
