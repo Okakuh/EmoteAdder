@@ -1,10 +1,11 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QScrollArea, QPushButton, QDialog, QGridLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QScrollArea, QPushButton, QDialog, QGridLayout, QLineEdit
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import Qt, QSize, QRunnable, Q_ARG
 import requests
 from PIL import Image, ImageSequence
 from io import BytesIO
-from Scripts.seventv import SevenTvApi
+from Scripts.seventv import SevenTvApi, SevenTvEmote
+from time import sleep
 
 api = SevenTvApi()
 
@@ -19,9 +20,19 @@ class Emote(QPushButton):
     style_selected = "border: 3px solid orange"
     emote_height = 50
 
-    def __init__(self, sevenTvUrl: str, image_data: bytes, *args, **kwargs):
+    def __init__(self, emote_data, image_data: bytes, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.sevenTvUrl = sevenTvUrl
+        self.__emote_data: SevenTvEmote = emote_data
+
+        self.sevenTvName = self.__emote_data.emote_name()
+        
+        self.minecraft_name = "name"
+        self.minecraft_file = "file"
+        self.minecraft_chars = "chars"
+        self.minecraft_height = "height"
+        self.minecraft_ascent = "ascent"
+
+        self.sevenTvUrl = self.__emote_data.url
         self.image_data = image_data
         self.setStyleSheet(Emote.style_unselected)
 
@@ -88,7 +99,7 @@ class Emote(QPushButton):
             
             scroll_layout.addWidget(frame_button, row, col)
             col += 1
-            if (col+1) * frame.size().width() + col * 5 > window_width - 30:
+            if (col+1) * frame.size().width() + col * 7 > window_width - 30:
                 col = 0
                 row += 1
 
@@ -105,6 +116,7 @@ class Emote(QPushButton):
 
     def unselect(self):
         self.setStyleSheet(Emote.style_unselected)
+    
 
 
 class Worker(QRunnable):
@@ -115,16 +127,18 @@ class Worker(QRunnable):
 
     def run(self):
         emote_data = api.get_emote(self.url)
-        image_url = emote_data.get_image_url()
-        response = requests.get(image_url)
+        # image_url = emote_data.get_image_url()
+        response = requests.get(emote_data.get_image_url())
         if response.status_code == 200:
             self.main_window.metaObject().invokeMethod(
                 self.main_window,
                 "addEmoteToDisplay",
                 Qt.ConnectionType.QueuedConnection,
-                Q_ARG(str, self.url),
+                Q_ARG(SevenTvEmote, emote_data),
                 Q_ARG(bytes, response.content),
             )
+        else:
+            print(f"Failed to load {self.url}")
 
 
 class EmotesDisplay:
@@ -138,7 +152,7 @@ class EmotesDisplay:
         first_vlayout.addLayout(self.emotes_rows)
         first_vlayout.addSpacerItem(QSpacerItem(1, 300))
         self.widget.setLayout(first_vlayout)
-        self.selectedEmote = None
+        self.selectedEmote: Emote = None
 
     def addEmoteToDisplay(self, emoteToAdd: Emote):
         def place(self, emoteToAdd: Emote):
@@ -181,13 +195,22 @@ class EmotesDisplay:
                 emote.unselect()
             else:
                 emote.select()
-                self.selectedEmote = selectedEmote
+                self.selectedEmote: Emote = selectedEmote
         self.mainWindow.selectedEmote.setFixedSize(selectedEmote.size())
         self.mainWindow.selectedEmote.setIconSize(selectedEmote.size())
         self.mainWindow.selectedEmote.setIcon(selectedEmote.icon())
+        
+        self.mainWindow.emoteSvnTvName.setText(self.selectedEmote.sevenTvName)
+        self.mainWindow.emoteName.setText(self.selectedEmote.minecraft_name)
+        self.mainWindow.emoteFile.setText(self.selectedEmote.minecraft_file)
+        self.mainWindow.emoteHeight.setText(self.selectedEmote.minecraft_height)
+        self.mainWindow.emoteChars.setText(self.selectedEmote.minecraft_chars)
+        self.mainWindow.emoteAscent.setText(self.selectedEmote.minecraft_ascent)
+
 
     def addEmote(self, url: str):
         worker = Worker(url, self.mainWindow)
         self.mainWindow.thread_pool.start(worker)
+        sleep(0.1)
 
 
